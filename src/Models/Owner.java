@@ -5,11 +5,16 @@ public class Owner {
      private String password;
 
      public Owner(){}
-     public Owner(int owner_id,String email, String password) {
-         this.owner_id = owner_id;
+     public Owner(String email, String password) {
          this.email = email;
          this.password = password;
      }
+
+    public Owner(int ownerId, String email, String password) {
+        this.owner_id = ownerId;
+        this.email = email;
+        this.password = password;
+    }
 
     public int getOwner_id() {
         return owner_id;
