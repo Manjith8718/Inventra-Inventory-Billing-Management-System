@@ -141,5 +141,60 @@ public class ProductsDAO {
 
         return false;
     }
+
+    public static void getBestSellingProducts() {
+
+        String sql = "SELECT p.product_id, p.name, p.category, " +
+                "SUM(oi.quantity * oi.price) AS total_revenue " +
+                "FROM order_items oi " +
+                "JOIN products p ON oi.product_id = p.product_id " +
+                "GROUP BY p.product_id, p.name, p.category " +
+                "ORDER BY total_revenue DESC";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            System.out.println("\n--- Best Selling Products (By Revenue) ---");
+
+            while (rs.next()) {
+                System.out.println(
+                        "Product ID: " + rs.getInt("product_id") +
+                                " | Name: " + rs.getString("name") +
+                                " | Category: " + rs.getString("category") +
+                                " | Revenue: " + rs.getDouble("total_revenue")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void getLowStockProducts(int threshold) {
+
+        String sql = "SELECT * FROM products WHERE stock < ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, threshold);
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("\n--- Low Stock Products ---");
+
+            while (rs.next()) {
+                System.out.println(
+                        "Product ID: " + rs.getInt("product_id") +
+                                " | Name: " + rs.getString("name") +
+                                " | Stock: " + rs.getInt("stock")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
