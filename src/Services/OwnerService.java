@@ -1,7 +1,12 @@
 package Services;
+import java.util.List;
 import java.util.Scanner;
+
+import DAO.OrderDAO;
 import DAO.OwnerDAO;
+import DAO.ProductsDAO;
 import Models.Owner;
+import Models.Products;
 import org.mindrot.jbcrypt.BCrypt;
 
 
@@ -89,6 +94,7 @@ public class OwnerService {
         }
     }
 
+
     public static void ownerDashboard() {
 
         while (true) {
@@ -100,7 +106,7 @@ public class OwnerService {
             System.out.println("4. View All Products");
             System.out.println("5. View Monthly Revenue");
             System.out.println("6. View Best Selling Products");
-            System.out.println("7. View All Bills");
+            System.out.println("7. View Low Stock Products");
             System.out.println("8. Logout");
             System.out.print("Choose option: ");
 
@@ -110,31 +116,33 @@ public class OwnerService {
             switch (choice) {
 
                 case 1:
-                    System.out.println("Add Product");
+                    addProductFlow();
                     break;
 
                 case 2:
-                    System.out.println("Update Product");
+                    updateProductFlow();
                     break;
 
                 case 3:
-                    System.out.println("Delete Product");
+                    deleteProductFlow();
                     break;
 
                 case 4:
-                    System.out.println("View Products");
+                    viewAllProductsFlow();
                     break;
 
                 case 5:
-                    System.out.println("Monthly Revenue");
+                    monthlyRevenueFlow();
                     break;
 
                 case 6:
-                    System.out.println("Best Selling Product");
+                    ProductsDAO.getBestSellingProducts();
                     break;
 
                 case 7:
-                    System.out.println("View All Bills");
+                    System.out.print("Enter stock threshold: ");
+                    int threshold = sc.nextInt();
+                    ProductsDAO.getLowStockProducts(threshold);
                     break;
 
                 case 8:
@@ -146,4 +154,95 @@ public class OwnerService {
             }
         }
     }
+    private static void addProductFlow() {
+
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Category: ");
+        String category = sc.nextLine();
+
+        System.out.print("Enter Price: ");
+        double price = sc.nextDouble();
+
+        System.out.print("Enter Stock: ");
+        int stock = sc.nextInt();
+
+        Products product = new Products(name, category, price, stock);
+
+        if (ProductsDAO.addProduct(product)) {
+            System.out.println("Product Added Successfully!");
+        } else {
+            System.out.println("Failed to Add Product.");
+        }
+    }
+
+    private static void updateProductFlow() {
+
+        System.out.print("Enter Product ID to update: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        Products existing = ProductsDAO.getProductById(id);
+
+        if (existing == null) {
+            System.out.println("Product Not Found.");
+            return;
+        }
+
+        System.out.print("Enter New Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter New Category: ");
+        String category = sc.nextLine();
+
+        System.out.print("Enter New Price: ");
+        double price = sc.nextDouble();
+
+        System.out.print("Enter New Stock: ");
+        int stock = sc.nextInt();
+
+        Products updated = new Products(id, name, category, price, stock);
+
+        if (ProductsDAO.updateProduct(updated)) {
+            System.out.println("Product Updated Successfully!");
+        } else {
+            System.out.println("Update Failed.");
+        }
+    }
+
+    private static void deleteProductFlow() {
+
+        System.out.print("Enter Product ID to delete: ");
+        int id = sc.nextInt();
+
+        if (ProductsDAO.deleteProduct(id)) {
+            System.out.println("Product Deleted Successfully!");
+        } else {
+            System.out.println("Delete Failed.");
+        }
+    }
+
+    private static void viewAllProductsFlow() {
+
+        List<Products> products = ProductsDAO.getAllProducts();
+
+        for (Products p : products) {
+            System.out.println(p);
+        }
+    }
+
+    private static void monthlyRevenueFlow() {
+
+        System.out.print("Enter Month (1-12): ");
+        int month = sc.nextInt();
+
+        System.out.print("Enter Year: ");
+        int year = sc.nextInt();
+
+        double revenue = OrderDAO.getMonthlyRevenue(month, year);
+
+        System.out.println("Monthly Revenue: " + revenue);
+    }
+
 }
