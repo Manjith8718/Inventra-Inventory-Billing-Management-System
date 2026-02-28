@@ -1,0 +1,9 @@
+===== INVENTRA BILL =====
+Invoice Number: INV-1772270722910
+Date: 2026-02-28T14:55:23.027791400
+
+Curd | Qty: 4 | Price: 30.0 | Total: 120.0
+Hyderabad Paneer | Qty: 10 | Price: 200.0 | Total: 2000.0
+
+----------------------------
+Grand Total: 2120.0

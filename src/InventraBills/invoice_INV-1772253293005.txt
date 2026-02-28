@@ -1,0 +1,9 @@
+===== INVENTRA BILL =====
+Invoice Number: INV-1772253293005
+Date: 2026-02-28T10:04:53.170707900
+
+Paneer | Qty: 1 | Price: 100.0 | Total: 100.0
+Curd | Qty: 4 | Price: 30.0 | Total: 120.0
+
+----------------------------
+Grand Total: 220.0
