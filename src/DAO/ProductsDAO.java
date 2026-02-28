@@ -196,5 +196,64 @@ public class ProductsDAO {
             e.printStackTrace();
         }
     }
+
+    public static List<Products> customerGetAllProducts() {
+
+        List<Products> list = new ArrayList<>();
+
+        String query = "SELECT * FROM products WHERE quantity > 0";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Products p = new Products(
+                        rs.getInt("product_id"),
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity")
+                );
+                list.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static List<Products> getProductsByCategory(String category) {
+
+        List<Products> list = new ArrayList<>();
+
+        String query = "SELECT * FROM products WHERE category = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, category);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Products p = new Products(
+                        rs.getInt("product_id"),
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getDouble("price"),
+                        rs.getInt("stock")
+                );
+
+                list.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }
 
