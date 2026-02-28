@@ -54,19 +54,14 @@ public class OwnerDAO {
     }
 
     public static boolean ownerExists() {
-
         String sql = "SELECT 1 FROM owner LIMIT 1";
-
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            return rs.next();
-
-        } catch (SQLException e) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
+                 ResultSet rs = ps.executeQuery();
+                 return rs.next();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return false;
     }
 }
