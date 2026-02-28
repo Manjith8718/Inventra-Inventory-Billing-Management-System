@@ -107,7 +107,8 @@ public class OwnerService {
             System.out.println("5. View Monthly Revenue");
             System.out.println("6. View Best Selling Products");
             System.out.println("7. View Low Stock Products");
-            System.out.println("8. Logout");
+            System.out.println("8. Update Stock");
+            System.out.println("9. Logout");
             System.out.print("Choose option: ");
 
             int choice = sc.nextInt();
@@ -146,6 +147,9 @@ public class OwnerService {
                     break;
 
                 case 8:
+                    updateStockFlow();
+                    break;
+                case 9:
                     System.out.println("Logging out...");
                     return;
 
@@ -228,7 +232,12 @@ public class OwnerService {
         List<Products> products = ProductsDAO.getAllProducts();
 
         for (Products p : products) {
-            System.out.println(p);
+            System.out.println(
+                    "ID: " + p.getProductId() +
+                            " | Name: " + p.getName() +
+                            " | Price: " + p.getPrice() +
+                            " | Stock: " + p.getStock()
+            );
         }
     }
 
@@ -245,4 +254,12 @@ public class OwnerService {
         System.out.println("Monthly Revenue: " + revenue);
     }
 
+    private static void updateStockFlow(){
+        System.out.print("Enter Product ID: ");
+        int id = sc.nextInt();
+        System.out.print("Enter New Stock: ");
+        int stock = sc.nextInt();
+
+        ProductsDAO.updateStock(id, stock);
+    }
 }
